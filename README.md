@@ -1,4 +1,4 @@
-# Manifest — USDC Payment Tracker (Built on Arc Testnet)
+# Manifest USDC Payment Tracker (Built on Arc Testnet)
 
 A lightweight web dashboard for tracking USDC payment status in real time on **Arc Testnet**. Built for the export/SME vendor use case: instead of waiting 1–3 days for manual bank wire confirmation, invoice status here updates automatically the moment USDC is received on-chain.
 
@@ -9,7 +9,7 @@ A lightweight web dashboard for tracking USDC payment status in real time on **A
 - Incoming USDC transaction history, read directly from on-chain `Transfer` events
 
 ## Getting started
-No build step required — just open `manifest-en.html` directly in a browser, or run it with Live Server (VS Code).
+No build step required just open `manifest-en.html` directly in a browser, or run it with Live Server (VS Code).
 
 1. Clone this repo
 2. Open `manifest-en.html` with Live Server
@@ -25,7 +25,7 @@ No build step required — just open `manifest-en.html` directly in a browser, o
 | USDC (ERC-20) | `0x3600000000000000000000000000000000000000` |
 
 ## Notes
-- Payment detection is based on total wallet balance change, not precise per-invoice matching — suitable for demos/hackathons.
+- Payment detection is based on total wallet balance change, not precise per-invoice matching suitable for demos/hackathons.
 - This project is built on Arc Network and is not officially affiliated with Circle/Arc.
 
 ## License
