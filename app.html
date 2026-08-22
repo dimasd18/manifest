@@ -510,24 +510,47 @@
     return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
 
-  $('invoiceForm').addEventListener('submit', function(e){
+  $('invoiceForm').addEventListener('submit', async function(e){
     e.preventDefault();
     const amountStr = $('amountInput').value;
+    const note = $('noteInput').value;
     if (!amountStr || Number(amountStr) <= 0) return;
-    state.invoiceCounter += 1;
-    state.invoices.push({
-      id: state.invoiceCounter,
-      amount: amountStr,
-      amountUnits: parseUnits(amountStr, CONFIG.USDC_DECIMALS),
-      note: $('noteInput').value,
-      targetAddress: state.address,
-      createdAt: new Date(),
-      baselineUsdc: null, // set on first poll
-      status: 'pending'
-    });
-    $('amountInput').value = '';
-    $('noteInput').value = '';
-    renderInvoices();
+
+    try {
+      // Convert USDC amount to hex for transaction
+      const amountWei = parseUnits(amountStr, CONFIG.USDC_DECIMALS);
+      const amountHex = '0x' + amountWei.toString(16);
+
+      // Trigger wallet transaction
+      const txHash = await window.ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [{
+          from: state.address,
+          to: CONFIG.USDC_ADDRESS,
+          data: '0xa9059cbb' + '0'.repeat(24) + state.address.slice(2).toLowerCase() + amountHex.padStart(64, '0'),
+          value: '0x0' // USDC is ERC20
+        }],
+      });
+
+      state.invoiceCounter += 1;
+      state.invoices.push({
+        id: state.invoiceCounter,
+        amount: amountStr,
+        amountUnits: amountWei,
+        note: note,
+        targetAddress: state.address,
+        createdAt: new Date(),
+        baselineUsdc: null, 
+        status: 'pending'
+      });
+      $('amountInput').value = '';
+      $('noteInput').value = '';
+      renderInvoices();
+      console.log('Transaction sent:', txHash);
+    } catch (err) {
+      console.error('Transaction failed:', err);
+      setStatus($('walletMsg'), 'Transaction failed: ' + err.message, 'error');
+    }
   });
 
   // ── Polling: check incoming payments & transaction history ────────────
