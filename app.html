@@ -522,13 +522,20 @@
       const amountHex = '0x' + amountWei.toString(16);
 
       // Trigger wallet transaction
+
+      // Clean 64-char address padding and clean 64-char uint256 padding
+      const cleanAddr = state.address.slice(2).toLowerCase().padStart(64, '0');
+      // Remove '0x' if present from amountHex before padding
+      const cleanAmountHex = (amountHex.startsWith('0x') ? amountHex.slice(2) : amountHex).padStart(64, '0');
+      const dataPayload = '0xa9059cbb' + cleanAddr + cleanAmountHex;
+
       const txHash = await window.ethereum.request({
         method: 'eth_sendTransaction',
         params: [{
           from: state.address,
           to: CONFIG.USDC_ADDRESS,
-          data: '0xa9059cbb' + '0'.repeat(24) + state.address.slice(2).toLowerCase() + amountHex.padStart(64, '0'),
-          value: '0x0' // USDC is ERC20
+          data: dataPayload,
+          value: '0x0'
         }],
       });
 
