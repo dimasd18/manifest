@@ -21,10 +21,10 @@ No build step required — just open  directly in a browser, or visit the [Live 
 ## Network configuration
 | Item | Value |
 |---|---|
-| Chain ID |  |
-| RPC URL |  |
-| Explorer |  |
-| USDC (ERC-20) |  |
+| Chain ID | `5042002` |
+| RPC URL | `https://rpc.testnet.arc.io` |
+| Explorer | `https://testnet.arcscan.app` |
+| USDC (ERC-20) | `0x3600000000000000000000000000000000000000` |
 
 ## Notes
 - Payment detection is based on total wallet balance change, not precise per-invoice matching — suitable for demos/hackathons.
